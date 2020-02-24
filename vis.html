@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  svg {
+    font: 10px sans-serif;
+    padding: 10px;
+  }
+
+  .axis,
+  .frame {
+    shape-rendering: crispEdges;
+  }
+
+  .axis line {
+    stroke: #ddd;
+  }
+
+  .axis path {
+    display: none;
+  }
+
+  .cell text {
+    font-weight: bold;
+    text-transform: capitalize;
+    fill: black;
+  }
+
+  .frame {
+    fill: none;
+    stroke: #aaa;
+  }
+
+  circle {
+    fill-opacity: .7;
+  }
+
+  circle.hidden {
+    fill: #ccc !important;
+  }
+
+  .extent {
+    fill: #000;
+    fill-opacity: .125;
+    stroke: #fff;
+  }
+
+  div.tooltip {
+    position: absolute;
+    text-align: left;
+    width: 220px;
+    height: 180px;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: rgba(125,125,255,0.8);
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+  }
+
+  /* Customize the label (the container) */
+  .container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Hide the browser's default checkbox */
+  .container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+
+  /* On mouse-over, add a grey background color */
+  .container:hover input~.checkmark {
+    background-color: #ccc;
+  }
+
+  /* When the checkbox is checked, add a blue background */
+  .container input:checked~.checkmark {
+    background-color: #2196F3;
+  }
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  /* Show the checkmark when checked */
+  .container input:checked~.checkmark:after {
+    display: block;
+  }
+
+  /* Style the checkmark/indicator */
+  .container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  .line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 2px;
+}
+</style>
+
+<body>
+
+  <script src="//d3js.org/d3.v4.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" charset="utf-8"></script>
+
+  <!-- <div id='main-content'> -->
+
+    <div id="slide-out">
+      <ul class="side-nav fixed">
+          <li>
+        <label for="year">Year:</label>
+        <div class="col-md-3 form-group">
+          <select id="year" class="form-control" onchange="changeYear()">
+            <option value="2000-2004">2000-2004</option>
+            <option value="2005-2009">2005-2009</option>
+            <option value="2010-2014">2010-2014</option>
+            <option value="1995-1999">1995-1999</option>
+          </select>
+        </div>
+      </li>
+      <li><h2>Category</h2>
+        <div id="checkboxgroup">
+          <label class="container">Determination Perseverance
+            <input type="checkbox" value="determination_perseverance" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Feeling of Responsibility
+            <input type="checkbox" value="feeling_of_responsibility" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Good Manners
+            <input type="checkbox" value="good_manners" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Hard Work
+            <input type="checkbox" value="hard_work" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Imagination
+            <input type="checkbox" value="imagination" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Independence
+            <input type="checkbox" value="independence" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Obedience
+            <input type="checkbox" value="obedience" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Religious Faith
+            <input type="checkbox" value="religious_faith" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Thrift Saving Money and Things
+            <input type="checkbox" value="thrift_saving_money_and_things" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Tolerance and Respect for Others
+            <input type="checkbox" value="tolerance_and_respect_for_others" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+          <label class="container">Unselfishness
+            <input type="checkbox" value="unselfishness" name="check[]">
+            <span class="checkmark"></span>
+          </label>
+        </div></li>
+      </ul>
+    </div>
+      <div id="chart" style="margin-left: 200px;">
+       <script type="text/javascript" src="script/scatter.js"></script>    </div>
+
+  <!-- </div> -->
+  
+</body>
+
+<style>
+  body {
+    display:flex;
+    flex-direction: row;
+  }
+
+  #slide-out {
+    display: inline-block;
+    width: 10px;
+    align-self: right;
+  }
+</style>
